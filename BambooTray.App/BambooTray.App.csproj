@@ -35,12 +35,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Appccelerate.EventBroker, Version=3.15.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Appccelerate.EventBroker.3.15.0\lib\net45\Appccelerate.EventBroker.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Appccelerate.Fundamentals, Version=2.8.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Appccelerate.Fundamentals.2.8.0\lib\portable-windows8+net45\Appccelerate.Fundamentals.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net451\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Extensions.AppccelerateEventBroker, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.AppccelerateEventBroker.3.2.0.0\lib\net45-full\Ninject.Extensions.AppccelerateEventBroker.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Extensions.ContextPreservation, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.ContextPreservation.3.2.0.0\lib\net45-full\Ninject.Extensions.ContextPreservation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Extensions.NamedScope, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.NamedScope.3.2.0.0\lib\net45-full\Ninject.Extensions.NamedScope.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -65,6 +85,15 @@
     </ApplicationDefinition>
     <Compile Include="AppKernel.cs" />
     <Compile Include="AppModule.cs" />
+    <Compile Include="EventBroker\BambooPlanPublisher.cs" />
+    <Compile Include="EventBroker\IBambooPlanPublisher.cs" />
+    <Compile Include="EventBroker\PlanEventArgs.cs" />
+    <Compile Include="IPopupViewModel.cs" />
+    <Compile Include="Model\BambooPlan.cs" />
+    <Compile Include="Bamboo\Resources\BuildState.cs" />
+    <Compile Include="Bamboo\IRestResponse.cs" />
+    <Compile Include="Bamboo\Resources\Plan.cs" />
+    <Compile Include="Bamboo\RestResponse.cs" />
     <Page Include="PopupView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,9 +102,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Bamboo\BambooClient.cs" />
+    <Compile Include="Bamboo\BambooService.cs" />
+    <Compile Include="Bamboo\Resources\Result.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
+    <Compile Include="Bamboo\IBambooClient.cs" />
+    <Compile Include="Bamboo\IBambooService.cs" />
     <Compile Include="PopupView.xaml.cs">
       <DependentUpon>PopupView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -111,11 +145,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\bamboo.ico" />
+    <Resource Include="Images\bamboo.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BambooTray\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

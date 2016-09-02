@@ -10,7 +10,6 @@ namespace BambooTray.App
         private AppKernel()
         {
             Kernel = new StandardKernel();
-            Kernel.Load<AppModule>();
         }
 
         public static AppKernel Instance =>

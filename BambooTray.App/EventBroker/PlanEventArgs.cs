@@ -1,0 +1,14 @@
+﻿using BambooTray.App.Model;
+
+namespace BambooTray.App.EventBroker
+{
+    public class PlanEventArgs
+    {
+        public PlanEventArgs(BambooPlan plan)
+        {
+            Plan = plan;
+        }
+
+        public BambooPlan Plan { get; set; }
+    }
+}

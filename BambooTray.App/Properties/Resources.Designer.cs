@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BambooTray.Properties
+namespace BambooTray.App.Properties
 {
 
 
