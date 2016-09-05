@@ -11,6 +11,8 @@ namespace BambooTray.App.Bamboo.Resources
         public string ProjectName { get; set; }
         [XmlElement("buildName")]
         public string BuildName { get; set; }
+        [XmlElement("planKey")]
+        public PlanKey PlanKey { get; set; }
         [XmlElement("isActive")]
         public bool IsActive { get; set; }
         [XmlElement("isBuilding")]
@@ -52,5 +54,12 @@ namespace BambooTray.App.Bamboo.Resources
                 return hashCode;
             }
         }
+    }
+
+    [XmlRoot("planKey")]
+    public class PlanKey
+    {
+        [XmlElement("key")]
+        public string Key { get; set; }
     }
 }

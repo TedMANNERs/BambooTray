@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BambooTray.App.Bamboo.Resources;
@@ -24,10 +26,7 @@ namespace BambooTray.App.Bamboo
         public void Start()
         {
             _source = new CancellationTokenSource();
-            foreach (string plan in _config.Plans)
-            {
-                Task.Run(() => UpdatePlan(plan, _source.Token), _source.Token);
-            }
+            Task.Run(() => UpdatePlan(_source.Token), _source.Token);
         }
 
         public void Stop()
@@ -35,40 +34,61 @@ namespace BambooTray.App.Bamboo
             _source.Cancel();
         }
 
-        private async Task UpdatePlan(string planKey, CancellationToken token)
+        private async Task UpdatePlan(CancellationToken token)
         {
-            Plan oldPlan = null;
-            Result oldResult = null;
+            Dictionary<string, Result> oldResults = new Dictionary<string, Result>();
 
             while (!token.IsCancellationRequested)
             {
-                IRestResponse<Plan> planResponse = await _bambooClient.GetAsync<Plan>($"{_config.BambooHostname}rest/api/latest/plan/{planKey}").ConfigureAwait(false);
-                if (!planResponse.IsSuccess)
-                    continue;
-
-                oldPlan = planResponse.Data;
-                if (!planResponse.Data.IsBuilding && oldResult != null)
-                    continue;
-
-                IRestResponse<Result> resultResponse = await _bambooClient.GetAsync<Result>($"{_config.BambooHostname}rest/api/latest/result/{planKey}/latest").ConfigureAwait(false);
-                if (!resultResponse.IsSuccess)
-                    continue;
-
-                if (oldResult == null || !oldResult.Equals(resultResponse.Data))
+                Plans plans = await GetFavouritePlans().ConfigureAwait(false);
+                if (plans != null)
                 {
-                    oldResult = resultResponse.Data;
-                    BambooPlan newBambooPlan = new BambooPlan
-                        {
-                            BuildName = oldPlan.BuildName,
-                            PlanKey = planKey,
-                            BuildState = oldResult.BuildState,
-                            ProjectKey = oldPlan.ProjectKey,
-                            ProjectName = oldPlan.ProjectName,
-                            IsBuilding = oldPlan.IsBuilding
-                        };
-                    _bambooPlanPublisher.FirePlanChanged(newBambooPlan);
+                    foreach (Plan plan in plans.PlanList)
+                    {
+                        if (plan.IsBuilding && oldResults.Any(x => x.Key == plan.PlanKey.Key))
+                            continue;
+
+                        Result newResult = await GetLatestBuild(plan.PlanKey.Key).ConfigureAwait(false);
+                        if (newResult == null)
+                            continue;
+
+                        if (oldResults.Any(x => x.Key == plan.PlanKey.Key) && newResult.Equals(oldResults[plan.PlanKey.Key]))
+                            continue;
+
+                        oldResults[plan.PlanKey.Key] = newResult;
+                        BambooPlan newBambooPlan = new BambooPlan
+                            {
+                                BuildName = plan.BuildName,
+                                PlanKey = plan.PlanKey.Key,
+                                BuildState = newResult.BuildState,
+                                ProjectKey = plan.ProjectKey,
+                                ProjectName = plan.ProjectName,
+                                IsBuilding = plan.IsBuilding
+                            };
+                        _bambooPlanPublisher.FirePlanChanged(newBambooPlan);
+                    }
                 }
+
+                Thread.Sleep(5000);
             }
+        }
+
+        private Task<Plans> GetFavouritePlans()
+        {
+            return GetResource<Plans>($"{_config.BambooHostname}rest/api/latest/plan/?favourite&expand=plans.plan");
+        }
+
+        private Task<Result> GetLatestBuild(string planKey)
+        {
+            return GetResource<Result>($"{_config.BambooHostname}rest/api/latest/result/{planKey}/latest");
+        }
+
+        private async Task<T> GetResource<T>(string url) where T : class
+        {
+            IRestResponse<T> resultResponse = await _bambooClient.GetAsync<T>(url).ConfigureAwait(false);
+            return resultResponse.IsSuccess
+                ? resultResponse.Data
+                : null;
         }
     }
 }
