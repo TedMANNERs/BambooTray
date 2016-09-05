@@ -15,7 +15,7 @@ namespace BambooTray.App
             
             Bind<IConfigurationManager>().To<ConfigurationManager>().InSingletonScope().OnActivation(x => x.Load());
             Bind<IBambooPlanPublisher>().To<BambooPlanPublisher>().RegisterOnEventBroker(EventBrokerName);
-            Bind<IBambooService>().To<BambooService>().InSingletonScope().RegisterOnEventBroker(EventBrokerName);
+            Bind<IBambooService>().To<BambooService>().InSingletonScope();
             Bind<IPopupViewModel>().To<PopupViewModel>().RegisterOnEventBroker(EventBrokerName);
             Bind<IBambooClient>().To<BambooClient>();
         }

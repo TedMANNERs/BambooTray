@@ -1,8 +1,9 @@
-﻿using BambooTray.App.Model;
+﻿using System;
+using BambooTray.App.Model;
 
 namespace BambooTray.App.EventBroker
 {
-    public class PlanEventArgs
+    public class PlanEventArgs : EventArgs
     {
         public PlanEventArgs(BambooPlan plan)
         {
