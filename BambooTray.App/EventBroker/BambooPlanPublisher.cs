@@ -11,7 +11,7 @@ namespace BambooTray.App.EventBroker
             PlanChanged?.Invoke(this, new PlanEventArgs(plan));
         }
 
-        [EventPublication("topic://BambooTray/PlanChanged")]
+        [EventPublication(Topics.PlanChanged)]
         public event EventHandler<PlanEventArgs> PlanChanged;
     }
 }

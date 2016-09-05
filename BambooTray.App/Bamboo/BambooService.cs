@@ -63,7 +63,8 @@ namespace BambooTray.App.Bamboo
                             PlanKey = planKey,
                             BuildState = oldResult.BuildState,
                             ProjectKey = oldPlan.ProjectKey,
-                            ProjectName = oldPlan.ProjectName
+                            ProjectName = oldPlan.ProjectName,
+                            IsBuilding = oldPlan.IsBuilding
                         };
                     _bambooPlanPublisher.FirePlanChanged(newBambooPlan);
                 }

@@ -9,5 +9,6 @@ namespace BambooTray.App.Model
         public string ProjectKey { get; set; }
         public string ProjectName { get; set; }
         public string BuildName { get; set; }
+        public bool IsBuilding { get; set; }
     }
 }

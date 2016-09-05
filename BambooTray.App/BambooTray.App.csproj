@@ -88,6 +88,7 @@
     <Compile Include="EventBroker\BambooPlanPublisher.cs" />
     <Compile Include="EventBroker\IBambooPlanPublisher.cs" />
     <Compile Include="EventBroker\PlanEventArgs.cs" />
+    <Compile Include="EventBroker\Topics.cs" />
     <Compile Include="IPopupViewModel.cs" />
     <Compile Include="Model\BambooPlan.cs" />
     <Compile Include="Bamboo\Resources\BuildState.cs" />
