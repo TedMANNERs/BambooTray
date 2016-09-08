@@ -85,19 +85,35 @@
     </ApplicationDefinition>
     <Compile Include="AppKernel.cs" />
     <Compile Include="AppModule.cs" />
+    <Compile Include="Bamboo\ISessionManager.cs" />
     <Compile Include="Bamboo\Resources\Link.cs" />
     <Compile Include="Bamboo\Resources\Plans.cs" />
+    <Compile Include="Bamboo\SessionManager.cs" />
+    <Compile Include="IViewModel.cs" />
+    <Compile Include="ViewCreator.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="EventBroker\BambooPlanPublisher.cs" />
     <Compile Include="EventBroker\IBambooPlanPublisher.cs" />
     <Compile Include="EventBroker\PlanEventArgs.cs" />
     <Compile Include="EventBroker\Topics.cs" />
+    <Compile Include="ILoginViewModel.cs" />
     <Compile Include="IPopupViewModel.cs" />
+    <Compile Include="LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginViewModel.cs" />
     <Compile Include="Model\BambooPlan.cs" />
     <Compile Include="Bamboo\Resources\BuildState.cs" />
     <Compile Include="Bamboo\IRestResponse.cs" />
     <Compile Include="Bamboo\Resources\Plan.cs" />
     <Compile Include="Bamboo\RestResponse.cs" />
+    <Page Include="LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PopupView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -109,9 +125,6 @@
     <Compile Include="Bamboo\BambooClient.cs" />
     <Compile Include="Bamboo\BambooService.cs" />
     <Compile Include="Bamboo\Resources\Result.cs" />
-    <Compile Include="Configuration\Configuration.cs" />
-    <Compile Include="Configuration\ConfigurationManager.cs" />
-    <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="Bamboo\IBambooClient.cs" />
     <Compile Include="Bamboo\IBambooService.cs" />
     <Compile Include="PopupView.xaml.cs">
@@ -151,7 +164,6 @@
   <ItemGroup>
     <Resource Include="Images\bamboo.ico" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

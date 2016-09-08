@@ -4,6 +4,6 @@ namespace BambooTray.App.Bamboo
 {
     public interface IBambooClient
     {
-        Task<IRestResponse<T>> GetAsync<T>(string url) where T : class;
+        Task<IRestResponse<T>> GetAsync<T>(string url, string sessionId) where T : class;
     }
 }

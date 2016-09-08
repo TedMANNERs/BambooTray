@@ -11,5 +11,11 @@ namespace BambooTray.App
         {
             InitializeComponent();
         }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            IPopupViewModel popupViewModel = (PopupViewModel)DataContext;
+            popupViewModel.Close();
+        }
     }
 }

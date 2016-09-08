@@ -17,21 +17,24 @@ namespace BambooTray.App
     public class PopupViewModel : IPopupViewModel
     {
         private readonly Configuration.Configuration _config;
+        private readonly ISessionManager _sessionManager;
+        private readonly IBambooService _bambooService;
 
-        public PopupViewModel(IBambooService bambooService, IConfigurationManager configurationManager)
+        public PopupViewModel(IConfigurationManager configurationManager, ISessionManager sessionManager, IBambooService bambooService)
         {
             _config = configurationManager.Config;
+            _sessionManager = sessionManager;
+            _bambooService = bambooService;
             OpenInBrowserCommand = new DelegateCommand(OpenInBrowser, () => true);
-            bambooService.Start();
         }
 
-        private void OpenInBrowser(object parameter)
-        {
-            Process.Start($"{_config.BambooHostname}/browse/{(string)parameter}");
-        }
-
-        public ObservableCollection<BambooPlan> BambooPlans { get; set; } = new ObservableCollection<BambooPlan>();
         public ICommand OpenInBrowserCommand { get; set; }
+        public ObservableCollection<BambooPlan> BambooPlans { get; set; } = new ObservableCollection<BambooPlan>();
+
+        public void Load()
+        {
+            _sessionManager.LoadSession();
+        }
 
         [EventSubscription(Topics.PlanChanged, typeof(OnPublisher))]
         public void PlanChanged(object sender, PlanEventArgs e)
@@ -41,6 +44,16 @@ namespace BambooTray.App
                 BambooPlans[index] = e.Plan;
             else
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => BambooPlans.Add(e.Plan)));
+        }
+
+        public void Close()
+        {
+            _bambooService.Stop();
+        }
+
+        private void OpenInBrowser(object parameter)
+        {
+            Process.Start($"{_config.BambooHostname}/browse/{(string)parameter}");
         }
     }
 }

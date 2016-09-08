@@ -16,7 +16,10 @@ namespace BambooTray.App.Bamboo
         private readonly Configuration.Configuration _config;
         private CancellationTokenSource _source;
 
-        public BambooService(IConfigurationManager configurationManager, IBambooPlanPublisher bambooPlanPublisher, IBambooClient bambooClient)
+        public BambooService(
+            IConfigurationManager configurationManager,
+            IBambooPlanPublisher bambooPlanPublisher,
+            IBambooClient bambooClient)
         {
             _bambooPlanPublisher = bambooPlanPublisher;
             _bambooClient = bambooClient;
@@ -85,7 +88,7 @@ namespace BambooTray.App.Bamboo
 
         private async Task<T> GetResource<T>(string url) where T : class
         {
-            IRestResponse<T> resultResponse = await _bambooClient.GetAsync<T>(url).ConfigureAwait(false);
+            IRestResponse<T> resultResponse = await _bambooClient.GetAsync<T>(url, SessionManager.SessionId).ConfigureAwait(false);
             return resultResponse.IsSuccess
                 ? resultResponse.Data
                 : null;

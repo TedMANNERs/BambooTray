@@ -12,12 +12,16 @@ namespace BambooTray.App
         {
             const string EventBrokerName = "BambooTrayEventBroker";
             this.AddGlobalEventBroker(EventBrokerName);
-            
+
             Bind<IConfigurationManager>().To<ConfigurationManager>().InSingletonScope().OnActivation(x => x.Load());
             Bind<IBambooPlanPublisher>().To<BambooPlanPublisher>().RegisterOnEventBroker(EventBrokerName);
             Bind<IBambooService>().To<BambooService>().InSingletonScope();
-            Bind<IPopupViewModel>().To<PopupViewModel>().RegisterOnEventBroker(EventBrokerName);
             Bind<IBambooClient>().To<BambooClient>();
+
+            Bind<IPopupViewModel>().To<PopupViewModel>().OnActivation(x => x.Load()).RegisterOnEventBroker(EventBrokerName);
+            Bind<ILoginViewModel>().To<LoginViewModel>();
+
+            Bind<ISessionManager>().To<SessionManager>().InSingletonScope();
         }
     }
 }

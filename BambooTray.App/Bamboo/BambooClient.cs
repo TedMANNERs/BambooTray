@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -12,20 +13,27 @@ namespace BambooTray.App.Bamboo
 
         public BambooClient()
         {
-            _client = new HttpClient { Timeout = TimeSpan.FromMilliseconds(60000) };
+            HttpClientHandler handler = new HttpClientHandler { UseCookies = false };
+            _client = new HttpClient(handler) { Timeout = TimeSpan.FromMilliseconds(60000) };
         }
 
-        public async Task<IRestResponse<T>> GetAsync<T>(string url) where T : class
+        public async Task<IRestResponse<T>> GetAsync<T>(string url, string sessionId) where T : class
         {
             IRestResponse<T> restResponse = new RestResponse<T>();
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(url).ConfigureAwait(false);
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("Cookie", sessionId);
+                HttpResponseMessage response = await _client.SendAsync(request).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(T));
                     T resource = (T)serializer.Deserialize(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
                     restResponse = new RestResponse<T>(response.IsSuccessStatusCode, resource);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    ViewCreator.ShowView<LoginView, LoginViewModel>();
                 }
             }
             catch (HttpRequestException)
