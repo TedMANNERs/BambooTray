@@ -85,12 +85,17 @@
     </ApplicationDefinition>
     <Compile Include="AppKernel.cs" />
     <Compile Include="AppModule.cs" />
-    <Compile Include="Bamboo\ISessionManager.cs" />
+    <Compile Include="SessionManagement\Authenticator.cs" />
     <Compile Include="Bamboo\Resources\Link.cs" />
     <Compile Include="Bamboo\Resources\Plans.cs" />
-    <Compile Include="Bamboo\SessionManager.cs" />
+    <Compile Include="ILoginDialogService.cs" />
+    <Compile Include="LoginDialogService.cs" />
+    <Compile Include="Model\LoginCredentials.cs" />
+    <Compile Include="Model\Session.cs" />
+    <Compile Include="SessionManagement\IAuthenticator.cs" />
+    <Compile Include="SessionManagement\ISessionManager.cs" />
     <Compile Include="IViewModel.cs" />
-    <Compile Include="ViewCreator.cs" />
+    <Compile Include="SessionManagement\SessionManager.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
@@ -123,10 +128,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bamboo\BambooClient.cs" />
-    <Compile Include="Bamboo\BambooService.cs" />
+    <Compile Include="Bamboo\BambooPlanUpdater.cs" />
     <Compile Include="Bamboo\Resources\Result.cs" />
     <Compile Include="Bamboo\IBambooClient.cs" />
-    <Compile Include="Bamboo\IBambooService.cs" />
+    <Compile Include="Bamboo\IBambooPlanUpdater.cs" />
     <Compile Include="PopupView.xaml.cs">
       <DependentUpon>PopupView.xaml</DependentUpon>
       <SubType>Code</SubType>

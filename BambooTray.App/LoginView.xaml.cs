@@ -14,15 +14,19 @@ namespace BambooTray.App
             InitializeComponent();
         }
 
-        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        private void PasswordChanged(object sender, RoutedEventArgs e)
         {
             _loginViewModel.Password = PasswordBox.SecurePassword;
         }
 
-        private void Window_Loaded(object obj, RoutedEventArgs e)
+        private void WindowLoaded(object obj, RoutedEventArgs e)
         {
             _loginViewModel = (LoginViewModel)DataContext;
-            _loginViewModel.Close += (sender, args) => Close();
+        }
+
+        private void LoginClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
         }
     }
 }

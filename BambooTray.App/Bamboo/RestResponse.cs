@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace BambooTray.App.Bamboo
 {
     public class RestResponse<T> : IRestResponse<T> where T : class
@@ -13,6 +15,7 @@ namespace BambooTray.App.Bamboo
         }
 
         public bool IsSuccess { get; }
+        public HttpStatusCode StatusCode { get; set; }
         public T Data { get; }
     }
 }

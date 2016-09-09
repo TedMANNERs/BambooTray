@@ -7,10 +7,10 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
-using BambooTray.App.Bamboo;
 using BambooTray.App.Configuration;
 using BambooTray.App.EventBroker;
 using BambooTray.App.Model;
+using BambooTray.App.SessionManagement;
 
 namespace BambooTray.App
 {
@@ -18,13 +18,11 @@ namespace BambooTray.App
     {
         private readonly Configuration.Configuration _config;
         private readonly ISessionManager _sessionManager;
-        private readonly IBambooService _bambooService;
 
-        public PopupViewModel(IConfigurationManager configurationManager, ISessionManager sessionManager, IBambooService bambooService)
+        public PopupViewModel(IConfigurationManager configurationManager, ISessionManager sessionManager)
         {
             _config = configurationManager.Config;
             _sessionManager = sessionManager;
-            _bambooService = bambooService;
             OpenInBrowserCommand = new DelegateCommand(OpenInBrowser, () => true);
         }
 
@@ -33,7 +31,7 @@ namespace BambooTray.App
 
         public void Load()
         {
-            _sessionManager.LoadSession();
+            _sessionManager.OpenSession();
         }
 
         [EventSubscription(Topics.PlanChanged, typeof(OnPublisher))]
@@ -48,7 +46,7 @@ namespace BambooTray.App
 
         public void Close()
         {
-            _bambooService.Stop();
+            _sessionManager.CloseSession();
         }
 
         private void OpenInBrowser(object parameter)

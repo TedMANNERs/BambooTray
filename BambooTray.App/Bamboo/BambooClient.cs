@@ -31,10 +31,8 @@ namespace BambooTray.App.Bamboo
                     T resource = (T)serializer.Deserialize(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
                     restResponse = new RestResponse<T>(response.IsSuccessStatusCode, resource);
                 }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    ViewFactory.CreateView<LoginView, LoginViewModel>();
-                }
+
+                restResponse.StatusCode = response.StatusCode;
             }
             catch (HttpRequestException)
             {
