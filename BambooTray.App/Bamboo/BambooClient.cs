@@ -33,7 +33,7 @@ namespace BambooTray.App.Bamboo
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    ViewCreator.ShowView<LoginView, LoginViewModel>();
+                    ViewFactory.CreateView<LoginView, LoginViewModel>();
                 }
             }
             catch (HttpRequestException)

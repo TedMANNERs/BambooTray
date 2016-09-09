@@ -37,7 +37,7 @@ namespace BambooTray.App.Bamboo
             }
             else
             {
-                ViewCreator.ShowView<LoginView, LoginViewModel>();
+                ViewFactory.CreateView<LoginView, LoginViewModel>();
             }
         }
 
