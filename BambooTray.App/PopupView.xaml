@@ -7,7 +7,7 @@
         Closed="Window_Closed" Loaded="Window_Loaded">
 
     <tb:TaskbarIcon Name="TaskbarIcon"
-                    IconSource="Images/bamboo.ico"
+                    IconSource="{Binding IconSource}"
                     PopupActivation="LeftClick"
                     MenuActivation="RightClick">
         <tb:TaskbarIcon.ContextMenu>

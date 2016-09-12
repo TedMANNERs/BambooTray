@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
+using BambooTray.App.Bamboo.Resources;
 using BambooTray.App.Configuration;
 using BambooTray.App.EventBroker;
 using BambooTray.App.Model;
@@ -20,21 +21,34 @@ namespace BambooTray.App
     {
         private readonly Configuration.Configuration _config;
         private readonly ISessionManager _sessionManager;
+        private Uri _iconSource;
 
         public PopupViewModel(IConfigurationManager configurationManager, ISessionManager sessionManager)
         {
             _config = configurationManager.Config;
             _sessionManager = sessionManager;
             OpenInBrowserCommand = new DelegateCommand(OpenInBrowser, () => true);
+            IconSource = new Uri("pack://application:,,,/Images/bamboo.ico");
+        }
+
+        public Uri IconSource
+        {
+            get { return _iconSource; }
+            set
+            {
+                _iconSource = value;
+                OnPropertyChanged();
+            }
         }
 
         public ICommand OpenInBrowserCommand { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<BambooPlan> BambooPlans { get; set; } = new ObservableCollection<BambooPlan>();
         public event EventHandler<PlanEventArgs> BambooPlanChanged;
 
-        public void Load()
+        public void Close()
         {
-            _sessionManager.OpenSession();
+            _sessionManager.CloseSession();
         }
 
         [EventSubscription(Topics.PlanChanged, typeof(OnPublisher))]
@@ -46,22 +60,41 @@ namespace BambooTray.App
                 Application.Current.Dispatcher.Invoke(() => { BambooPlans[index] = e.Plan; });
                 BambooPlanChanged?.Invoke(sender, e);
                 OnPropertyChanged("BambooPlans");
+                UpdateIcon(e.Plan);
             }
             else
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => BambooPlans.Add(e.Plan)));
         }
 
-        public void Close()
+        public void Load()
         {
-            _sessionManager.CloseSession();
+            _sessionManager.OpenSession();
+        }
+
+        private void UpdateIcon(BambooPlan plan)
+        {
+            switch (plan.BuildState)
+            {
+                case BuildState.Failed:
+                    IconSource = new Uri("pack://application:,,,/Images/bamboo-failed.ico");
+                    break;
+                case BuildState.Successful:
+                    if (!BambooPlans.Any(x => x.BuildState != BuildState.Successful))
+                        IconSource = new Uri("pack://application:,,,/Images/bamboo-successful.ico");
+                    break;
+                case BuildState.Unknown:
+                    if (!BambooPlans.Any(x => x.BuildState == BuildState.Successful || x.BuildState == BuildState.Failed))
+                        IconSource = new Uri("pack://application:,,,/Images/bamboo.ico");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void OpenInBrowser(object parameter)
         {
             Process.Start($"{_config.BambooHostname}/browse/{(string)parameter}");
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
