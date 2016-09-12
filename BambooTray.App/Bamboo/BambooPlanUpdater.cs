@@ -54,17 +54,19 @@ namespace BambooTray.App.Bamboo
 
                 foreach (Plan plan in plans.PlanList)
                 {
-                    Result newResult = await GetLatestBuild(session, plan.PlanKey.Key).ConfigureAwait(false);
-                    if (newResult == null)
-                        continue;
-
                     BambooPlan newBambooPlan = new BambooPlan();
+                    Result newResult;
                     if (plan.IsBuilding)
                     {
-                        Result buildingResult = await GetBuildingBuild(session, plan.PlanKey.Key).ConfigureAwait(false);
-                        if (buildingResult != null)
-                            newBambooPlan.RemainingTime = buildingResult.Progress.PrettyTimeRamaining;
+                        newResult = await GetBuildingBuild(session, plan.PlanKey.Key).ConfigureAwait(false);
+                        if (newResult != null)
+                            newBambooPlan.RemainingTime = newResult.Progress.PrettyTimeRamaining;
                     }
+                    else
+                        newResult = await GetLatestBuild(session, plan.PlanKey.Key).ConfigureAwait(false);
+
+                    if (newResult == null)
+                        continue;
 
                     if (oldResults.Any(x => x.Key == plan.PlanKey.Key) && newResult.Equals(oldResults[plan.PlanKey.Key]))
                         continue;
