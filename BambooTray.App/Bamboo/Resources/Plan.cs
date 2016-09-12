@@ -7,16 +7,22 @@ namespace BambooTray.App.Bamboo.Resources
     {
         [XmlElement("projectKey")]
         public string ProjectKey { get; set; }
+
         [XmlElement("projectName")]
         public string ProjectName { get; set; }
+
         [XmlElement("buildName")]
         public string BuildName { get; set; }
+
         [XmlElement("planKey")]
         public PlanKey PlanKey { get; set; }
-        [XmlElement("isActive")]
-        public bool IsActive { get; set; }
+
+        [XmlAttribute("enabled")]
+        public bool Enabled { get; set; }
+
         [XmlElement("isBuilding")]
         public bool IsBuilding { get; set; }
+
         [XmlElement("averageBuildTimeInSeconds")]
         public float AverageBuildTimeInSeconds { get; set; }
 
@@ -25,7 +31,7 @@ namespace BambooTray.App.Bamboo.Resources
             return string.Equals(ProjectKey, other.ProjectKey) &&
                    string.Equals(ProjectName, other.ProjectName) &&
                    string.Equals(BuildName, other.BuildName) &&
-                   IsActive == other.IsActive &&
+                   Enabled == other.Enabled &&
                    IsBuilding == other.IsBuilding &&
                    AverageBuildTimeInSeconds.Equals(other.AverageBuildTimeInSeconds);
         }
@@ -48,7 +54,7 @@ namespace BambooTray.App.Bamboo.Resources
                 int hashCode = (ProjectKey != null ? ProjectKey.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (ProjectName != null ? ProjectName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (BuildName != null ? BuildName.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ IsActive.GetHashCode();
+                hashCode = (hashCode * 397) ^ Enabled.GetHashCode();
                 hashCode = (hashCode * 397) ^ IsBuilding.GetHashCode();
                 hashCode = (hashCode * 397) ^ AverageBuildTimeInSeconds.GetHashCode();
                 return hashCode;

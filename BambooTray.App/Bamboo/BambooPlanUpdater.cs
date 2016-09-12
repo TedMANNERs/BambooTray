@@ -54,29 +54,39 @@ namespace BambooTray.App.Bamboo
 
                 foreach (Plan plan in plans.PlanList)
                 {
-                    if (plan.IsBuilding && oldResults.Any(x => x.Key == plan.PlanKey.Key))
-                        continue;
-
                     Result newResult = await GetLatestBuild(session, plan.PlanKey.Key).ConfigureAwait(false);
                     if (newResult == null)
                         continue;
+
+                    BambooPlan newBambooPlan = new BambooPlan();
+                    if (plan.IsBuilding)
+                    {
+                        Result buildingResult = await GetBuildingBuild(session, plan.PlanKey.Key).ConfigureAwait(false);
+                        if (buildingResult != null)
+                            newBambooPlan.RemainingTime = buildingResult.Progress.PrettyTimeRamaining;
+                    }
 
                     if (oldResults.Any(x => x.Key == plan.PlanKey.Key) && newResult.Equals(oldResults[plan.PlanKey.Key]))
                         continue;
 
                     oldResults[plan.PlanKey.Key] = newResult;
-                    BambooPlan newBambooPlan = new BambooPlan
-                        {
-                            BuildName = plan.BuildName,
-                            PlanKey = plan.PlanKey.Key,
-                            BuildState = newResult.BuildState,
-                            ProjectKey = plan.ProjectKey,
-                            ProjectName = plan.ProjectName,
-                            IsBuilding = plan.IsBuilding
-                        };
+                    newBambooPlan.BuildName = plan.BuildName;
+                    newBambooPlan.PlanKey = plan.PlanKey.Key;
+                    newBambooPlan.BuildState = newResult.BuildState;
+                    newBambooPlan.ProjectKey = plan.ProjectKey;
+                    newBambooPlan.ProjectName = plan.ProjectName;
+                    newBambooPlan.IsBuilding = plan.IsBuilding;
+                    newBambooPlan.IsEnabled = plan.Enabled;
                     _bambooPlanPublisher.FirePlanChanged(newBambooPlan);
                 }
             }
+        }
+
+        private async Task<Result> GetBuildingBuild(Session session, string planKey)
+        {
+            Results latestResult = await GetResource<Results>($"{_config.BambooHostname}rest/api/latest/result/{planKey}/?max-results=1&expand=results.result", session).ConfigureAwait(false);
+            int buildNumber = latestResult.ResultList.First().BuildNumber;
+            return await GetResource<Result>($"{_config.BambooHostname}rest/api/latest/result/{planKey}/{++buildNumber}", session).ConfigureAwait(false);
         }
 
         private Task<Plans> GetFavouritePlans(Session session)

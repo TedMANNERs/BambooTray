@@ -36,12 +36,16 @@
                                                     <DataTrigger Binding="{Binding IsBuilding}" Value="true">
                                                         <Setter Property="Fill" Value="DodgerBlue"/>
                                                     </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Enabled}" Value="false">
+                                                        <Setter Property="Fill" Value="Gray"/>
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </Ellipse.Style>
                                     </Ellipse>
                                     <Label Content="{Binding ProjectName}" FontSize="16"/>
                                     <Label Content="{Binding BuildName}" FontSize="16"/>
+                                    <Label Content="{Binding RemainingTime}" FontSize="12"/>
                                 </StackPanel>
                             </Button>
                         </DataTemplate>

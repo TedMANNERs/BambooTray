@@ -85,6 +85,8 @@
     </ApplicationDefinition>
     <Compile Include="AppKernel.cs" />
     <Compile Include="AppModule.cs" />
+    <Compile Include="Bamboo\Resources\Progress.cs" />
+    <Compile Include="Bamboo\Resources\Results.cs" />
     <Compile Include="SessionManagement\Authenticator.cs" />
     <Compile Include="Bamboo\Resources\Link.cs" />
     <Compile Include="Bamboo\Resources\Plans.cs" />

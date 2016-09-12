@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using BambooTray.App.Bamboo;
 using BambooTray.App.Model;
 
@@ -34,14 +35,7 @@ namespace BambooTray.App.SessionManagement
                 }
             }
             else
-            {
-                LoginCredentials credentials = _loginDialogService.ShowDialog();
-                if (credentials != null)
-                {
-                    _session = await _authenticator.Authenticate(credentials);
-                    SaveSession();
-                }
-            }
+                await GetNewSession().ConfigureAwait(false);
         }
 
         public void CloseSession()
@@ -49,16 +43,28 @@ namespace BambooTray.App.SessionManagement
             _bambooPlanUpdater.Stop();
         }
 
+        private async Task GetNewSession()
+        {
+            LoginCredentials credentials = _loginDialogService.ShowDialog();
+            if (credentials != null)
+            {
+                _session = await _authenticator.Authenticate(credentials).ConfigureAwait(false);
+                SaveSession();
+            }
+        }
+
         public event EventHandler SessionExpired;
 
         private async void OnSessionExpired(object sender, EventArgs args)
         {
-            await OpenSession();
+            _bambooPlanUpdater.Stop();
+            await Application.Current.Dispatcher.InvokeAsync(GetNewSession);
+            _bambooPlanUpdater.Start(_session, SessionExpired);
         }
 
         private void SaveSession()
         {
-            using (FileStream stream = new FileStream(SessionFileName, FileMode.CreateNew))
+            using (FileStream stream = new FileStream(SessionFileName, FileMode.Create))
             using (StreamWriter writer = new StreamWriter(stream))
             {
                 writer.Write(_session.SessionId);
