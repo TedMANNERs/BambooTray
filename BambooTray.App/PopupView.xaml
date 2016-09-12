@@ -6,7 +6,13 @@
         Visibility="Hidden" ShowInTaskbar="False" Icon="Images/bamboo.ico" WindowStyle="None" Width="10" Height="10" Closed="Window_Closed">
 
     <tb:TaskbarIcon IconSource="Images/bamboo.ico"
-                    PopupActivation="LeftOrRightClick">
+                    PopupActivation="LeftClick"
+                    MenuActivation="RightClick">
+        <tb:TaskbarIcon.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Exit" Click="Exit_Click"/>
+            </ContextMenu>
+        </tb:TaskbarIcon.ContextMenu>
         <tb:TaskbarIcon.TrayPopup>
             <Border BorderBrush="LightGray" BorderThickness="1">
                 <ItemsControl ItemsSource="{Binding BambooPlans}" Background="White" AlternationCount="{Binding BambooPlans.Count}">

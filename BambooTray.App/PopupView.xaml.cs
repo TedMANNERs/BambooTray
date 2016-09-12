@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace BambooTray.App
 {
@@ -16,6 +17,11 @@ namespace BambooTray.App
         {
             IPopupViewModel popupViewModel = (PopupViewModel)DataContext;
             popupViewModel.Close();
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
