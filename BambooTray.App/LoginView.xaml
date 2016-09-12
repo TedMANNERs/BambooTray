@@ -24,10 +24,9 @@
             <PasswordBox Grid.Column="1" Grid.Row="1" Margin="5,5" Name="PasswordBox"
                          PasswordChanged="PasswordChanged" />
             
-            <Button VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="2" Content="Login" Margin="5" Padding="2" 
-                    Command="{Binding LoginCommand}" IsDefault="True" Click="LoginClick" />
-            <Button VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="2" Content="Cancel" Margin="5" Padding="2" 
-                    Command="{Binding CancelCommand}" IsCancel="True" />
+            <Button VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="2" Content="Login" Margin="5" Padding="2" IsDefault="True" 
+                    Click="LoginClick" />
+            <Button VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="2" Content="Cancel" Margin="5" Padding="2" IsCancel="True" />
         </Grid>
     </DockPanel>
 </Window>
