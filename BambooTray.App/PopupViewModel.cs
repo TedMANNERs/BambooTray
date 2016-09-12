@@ -1,7 +1,9 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -14,7 +16,7 @@ using BambooTray.App.SessionManagement;
 
 namespace BambooTray.App
 {
-    public class PopupViewModel : IPopupViewModel
+    public class PopupViewModel : IPopupViewModel, INotifyPropertyChanged
     {
         private readonly Configuration.Configuration _config;
         private readonly ISessionManager _sessionManager;
@@ -28,6 +30,7 @@ namespace BambooTray.App
 
         public ICommand OpenInBrowserCommand { get; set; }
         public ObservableCollection<BambooPlan> BambooPlans { get; set; } = new ObservableCollection<BambooPlan>();
+        public event EventHandler<PlanEventArgs> BambooPlanChanged;
 
         public void Load()
         {
@@ -39,7 +42,11 @@ namespace BambooTray.App
         {
             int index = BambooPlans.IndexOf(BambooPlans.FirstOrDefault(x => x.PlanKey == e.Plan.PlanKey));
             if (index != -1)
-                BambooPlans[index] = e.Plan;
+            {
+                Application.Current.Dispatcher.Invoke(() => { BambooPlans[index] = e.Plan; });
+                BambooPlanChanged?.Invoke(sender, e);
+                OnPropertyChanged("BambooPlans");
+            }
             else
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => BambooPlans.Add(e.Plan)));
         }
@@ -52,6 +59,13 @@ namespace BambooTray.App
         private void OpenInBrowser(object parameter)
         {
             Process.Start($"{_config.BambooHostname}/browse/{(string)parameter}");
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
