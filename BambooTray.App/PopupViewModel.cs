@@ -60,10 +60,11 @@ namespace BambooTray.App
                 Application.Current.Dispatcher.Invoke(() => { BambooPlans[index] = e.Plan; });
                 BambooPlanChanged?.Invoke(sender, e);
                 OnPropertyChanged("BambooPlans");
-                UpdateIcon(e.Plan);
             }
             else
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => BambooPlans.Add(e.Plan)));
+
+            UpdateIcon(e.Plan);
         }
 
         public void Load()
