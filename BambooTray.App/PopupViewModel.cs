@@ -13,20 +13,17 @@ using BambooTray.App.Bamboo.Resources;
 using BambooTray.App.Configuration;
 using BambooTray.App.EventBroker;
 using BambooTray.App.Model;
-using BambooTray.App.SessionManagement;
 
 namespace BambooTray.App
 {
     public class PopupViewModel : IPopupViewModel, INotifyPropertyChanged
     {
         private readonly Configuration.Configuration _config;
-        private readonly ISessionManager _sessionManager;
         private Uri _iconSource;
 
-        public PopupViewModel(IConfigurationManager configurationManager, ISessionManager sessionManager)
+        public PopupViewModel(IConfigurationManager configurationManager)
         {
             _config = configurationManager.Config;
-            _sessionManager = sessionManager;
             OpenInBrowserCommand = new DelegateCommand(OpenInBrowser, () => true);
             IconSource = new Uri("pack://application:,,,/Images/bamboo.ico");
         }
@@ -46,11 +43,6 @@ namespace BambooTray.App
         public ObservableCollection<BambooPlan> BambooPlans { get; set; } = new ObservableCollection<BambooPlan>();
         public event EventHandler<PlanEventArgs> BambooPlanChanged;
 
-        public void Close()
-        {
-            _sessionManager.CloseSession();
-        }
-
         [EventSubscription(Topics.PlanChanged, typeof(OnPublisher))]
         public void PlanChanged(object sender, PlanEventArgs e)
         {
@@ -65,11 +57,6 @@ namespace BambooTray.App
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => BambooPlans.Add(e.Plan)));
 
             UpdateIcon(e.Plan);
-        }
-
-        public void Load()
-        {
-            _sessionManager.OpenSession();
         }
 
         private void UpdateIcon(BambooPlan plan)

@@ -12,8 +12,8 @@ namespace BambooTray.App
         {
             base.OnStartup(e);
             AppKernel.Instance.Kernel.Load<AppModule>();
-            Current.MainWindow = AppKernel.Get<PopupView>();
-            Current.MainWindow.DataContext = AppKernel.Get<IPopupViewModel>();
+            Current.MainWindow = AppKernel.Get<MainView>();
+            Current.MainWindow.DataContext = AppKernel.Get<IMainViewModel>();
             Current.MainWindow.Show();
         }
     }
