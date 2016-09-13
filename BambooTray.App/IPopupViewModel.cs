@@ -11,7 +11,7 @@ namespace BambooTray.App
     {
         Uri IconSource { get; set; }
         ICommand OpenInBrowserCommand { get; set; }
-        IEnumerable<BambooPlan> BambooPlans { get; }
+        ICollection<BambooPlan> BambooPlans { get; }
         event PropertyChangedEventHandler PropertyChanged;
         event EventHandler<PlanEventArgs> BambooPlanChanged;
 

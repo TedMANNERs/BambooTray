@@ -32,7 +32,7 @@ namespace BambooTray.App
 
         public Uri IconSource { get; set; }
         public ICommand OpenInBrowserCommand { get; set; }
-        public IEnumerable<BambooPlan> BambooPlans { get; set; }
+        public ICollection<BambooPlan> BambooPlans { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<PlanEventArgs> BambooPlanChanged;
 

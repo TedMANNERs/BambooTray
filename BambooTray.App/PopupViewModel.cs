@@ -38,7 +38,7 @@ namespace BambooTray.App
 
         public ICommand OpenInBrowserCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-        public IEnumerable<BambooPlan> BambooPlans => _bambooPlans.Values.ToList(); // ui doesn't update without ToList()
+        public ICollection<BambooPlan> BambooPlans => _bambooPlans.Values.ToList(); // ui doesn't update without ToList()
         public event EventHandler<PlanEventArgs> BambooPlanChanged;
 
         [EventSubscription(Topics.PlanChanged, typeof(OnPublisher))]
