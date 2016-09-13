@@ -2,6 +2,6 @@
 {
     public class Configuration
     {
-        public string BambooHostname { get; set; }
+        public string BambooHostname { get; set; } = "http://localhost";
     }
 }
