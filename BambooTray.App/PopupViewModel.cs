@@ -1,12 +1,9 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Appccelerate.EventBroker;
 using Appccelerate.EventBroker.Handlers;
 using BambooTray.App.Bamboo.Resources;
@@ -18,6 +15,7 @@ namespace BambooTray.App
 {
     public class PopupViewModel : IPopupViewModel, INotifyPropertyChanged
     {
+        private readonly IDictionary<string, BambooPlan> _bambooPlans = new Dictionary<string, BambooPlan>();
         private readonly Configuration.Configuration _config;
         private Uri _iconSource;
 
@@ -34,29 +32,24 @@ namespace BambooTray.App
             set
             {
                 _iconSource = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(IconSource));
             }
         }
 
         public ICommand OpenInBrowserCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<BambooPlan> BambooPlans { get; set; } = new ObservableCollection<BambooPlan>();
+        public IEnumerable<BambooPlan> BambooPlans => _bambooPlans.Values.ToList(); // ui doesn't update without ToList()
         public event EventHandler<PlanEventArgs> BambooPlanChanged;
 
         [EventSubscription(Topics.PlanChanged, typeof(OnPublisher))]
         public void PlanChanged(object sender, PlanEventArgs e)
         {
-            int index = BambooPlans.IndexOf(BambooPlans.FirstOrDefault(x => x.PlanKey == e.Plan.PlanKey));
-            if (index != -1)
-            {
-                Application.Current.Dispatcher.Invoke(() => { BambooPlans[index] = e.Plan; });
+            if (_bambooPlans.ContainsKey(e.Plan.PlanKey))
                 BambooPlanChanged?.Invoke(sender, e);
-                OnPropertyChanged("BambooPlans");
-            }
-            else
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => BambooPlans.Add(e.Plan)));
 
+            _bambooPlans[e.Plan.PlanKey] = e.Plan;
             UpdateIcon(e.Plan);
+            OnPropertyChanged(nameof(BambooPlans));
         }
 
         private void UpdateIcon(BambooPlan plan)
@@ -67,11 +60,11 @@ namespace BambooTray.App
                     IconSource = new Uri("pack://application:,,,/Images/bamboo-failed.ico");
                     break;
                 case BuildState.Successful:
-                    if (!BambooPlans.Any(x => x.BuildState != BuildState.Successful))
+                    if (_bambooPlans.All(x => x.Value.BuildState == BuildState.Successful))
                         IconSource = new Uri("pack://application:,,,/Images/bamboo-successful.ico");
                     break;
                 case BuildState.Unknown:
-                    if (!BambooPlans.Any(x => x.BuildState == BuildState.Successful || x.BuildState == BuildState.Failed))
+                    if (_bambooPlans.All(x => x.Value.BuildState == BuildState.Unknown))
                         IconSource = new Uri("pack://application:,,,/Images/bamboo.ico");
                     break;
                 default:
@@ -84,7 +77,7 @@ namespace BambooTray.App
             Process.Start($"{_config.BambooHostname}/browse/{(string)parameter}");
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using BambooTray.App.Bamboo.Resources;
@@ -12,29 +12,31 @@ namespace BambooTray.App
     {
         public PopupViewModelDesignData()
         {
-            BambooPlans = new ObservableCollection<BambooPlan>
+            BambooPlans = new List<BambooPlan>
                 {
-                    new BambooPlan {BuildState = BuildState.Successful, BuildName = "Build", ProjectName = "Project"}
+                    new BambooPlan
+                        {
+                            BuildName = "Building Build",
+                            ProjectName = "Project",
+                            IsBuilding = true,
+                            RemainingTime = "15 min remaining"
+                        },
+                    new BambooPlan
+                        {
+                            BuildState = BuildState.Successful,
+                            BuildName = "Successful Build",
+                            ProjectName = "Project"
+                        }
                 };
         }
 
         public Uri IconSource { get; set; }
         public ICommand OpenInBrowserCommand { get; set; }
-        public ObservableCollection<BambooPlan> BambooPlans { get; set; }
+        public IEnumerable<BambooPlan> BambooPlans { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<PlanEventArgs> BambooPlanChanged;
 
-        public void Close()
-        {
-            throw new NotImplementedException();
-        }
-
         public void PlanChanged(object sender, PlanEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Load()
         {
             throw new NotImplementedException();
         }

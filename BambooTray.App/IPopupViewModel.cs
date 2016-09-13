@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using BambooTray.App.EventBroker;
@@ -11,7 +11,7 @@ namespace BambooTray.App
     {
         Uri IconSource { get; set; }
         ICommand OpenInBrowserCommand { get; set; }
-        ObservableCollection<BambooPlan> BambooPlans { get; set; }
+        IEnumerable<BambooPlan> BambooPlans { get; }
         event PropertyChangedEventHandler PropertyChanged;
         event EventHandler<PlanEventArgs> BambooPlanChanged;
 
