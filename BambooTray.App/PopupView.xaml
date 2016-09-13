@@ -36,7 +36,7 @@
                                             <DataTrigger Binding="{Binding IsBuilding}" Value="true">
                                                 <Setter Property="Fill" Value="DodgerBlue"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Enabled}" Value="false">
+                                            <DataTrigger Binding="{Binding IsEnabled}" Value="false">
                                                 <Setter Property="Fill" Value="Gray"/>
                                             </DataTrigger>
                                         </Style.Triggers>
