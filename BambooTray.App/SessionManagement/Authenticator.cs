@@ -19,7 +19,7 @@ namespace BambooTray.App.SessionManagement
             _config = configurationManager.Config;
         }
 
-        public async Task<Model.Session> Authenticate(LoginCredentials credentials)
+        public async Task<Session> Authenticate(LoginCredentials credentials)
         {
             using (HttpClientHandler handle = new HttpClientHandler { UseCookies = false })
             using (HttpClient client = new HttpClient(handle))
@@ -35,12 +35,16 @@ namespace BambooTray.App.SessionManagement
                                 })
                     };
                 HttpResponseMessage postResponse = await client.SendAsync(post).ConfigureAwait(false);
-                if (!postResponse.IsSuccessStatusCode)
+
+                IEnumerable<string> seraphHeaders = postResponse.Headers.GetValues("X-Seraph-LoginReason");
+                string xSeraphLoginReason = seraphHeaders.First();
+
+                if (!postResponse.IsSuccessStatusCode || xSeraphLoginReason != XSeraphLoginReason.Ok)
                     return null;
 
-                IEnumerable<string> enumerable = postResponse.Headers.GetValues("Set-Cookie");
-                string sessionId = enumerable.First(x => x.Contains("JSESSIONID")).Split(';')[0];
-                return new Model.Session(sessionId);
+                IEnumerable<string> sessionHeaders = postResponse.Headers.GetValues("Set-Cookie");
+                string sessionId = sessionHeaders.First(x => x.Contains("JSESSIONID")).Split(';')[0];
+                return new Session(sessionId);
             }
         }
 
@@ -57,5 +61,12 @@ namespace BambooTray.App.SessionManagement
                 Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
             }
         }
+    }
+
+    internal static class XSeraphLoginReason
+    {
+        public const string Ok = "OK";
+        public const string AuthenticatedFailed = "AUTHENTICATED_FAILED";
+        public const string AuthenticatedDenied = "AUTHENTICATED_DENIED";
     }
 }

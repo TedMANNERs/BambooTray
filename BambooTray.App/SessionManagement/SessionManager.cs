@@ -45,12 +45,15 @@ namespace BambooTray.App.SessionManagement
 
         private async Task GetNewSession()
         {
-            LoginCredentials credentials = _loginDialogService.ShowDialog();
-            if (credentials != null)
+            _session = null;
+            do
             {
-                _session = await _authenticator.Authenticate(credentials).ConfigureAwait(false);
-                SaveSession();
+                LoginCredentials credentials = Application.Current.Dispatcher.Invoke(_loginDialogService.ShowDialog);
+                if (credentials != null)
+                    _session = await _authenticator.Authenticate(credentials).ConfigureAwait(false);
             }
+            while (_session == null);
+            SaveSession();
         }
 
         public event EventHandler SessionExpired;
@@ -58,8 +61,7 @@ namespace BambooTray.App.SessionManagement
         private async void OnSessionExpired(object sender, EventArgs args)
         {
             _bambooPlanUpdater.Stop();
-            await Application.Current.Dispatcher.InvokeAsync(GetNewSession);
-            _bambooPlanUpdater.Start(_session, SessionExpired);
+            await GetNewSession().ContinueWith(task => _bambooPlanUpdater.Start(_session, SessionExpired)).ConfigureAwait(false);
         }
 
         private void SaveSession()
