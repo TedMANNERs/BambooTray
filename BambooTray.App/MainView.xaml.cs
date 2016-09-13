@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows;
 using BambooTray.App.Bamboo.Resources;
 using BambooTray.App.EventBroker;
-using Hardcodet.Wpf.TaskbarNotification;
 
 namespace BambooTray.App
 {
@@ -20,7 +18,7 @@ namespace BambooTray.App
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             IMainViewModel mainViewModel = (MainViewModel)DataContext;
-            mainViewModel.BambooPlanChanged += BambooPlanChanged;
+            mainViewModel.PopupViewModel.BambooPlanChanged += BambooPlanChanged;
         }
 
         private void Window_Closed(object sender, EventArgs e)

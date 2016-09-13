@@ -1,5 +1,3 @@
-using System;
-using BambooTray.App.EventBroker;
 using BambooTray.App.SessionManagement;
 
 namespace BambooTray.App
@@ -15,7 +13,6 @@ namespace BambooTray.App
         }
 
         public IPopupViewModel PopupViewModel { get; set; }
-        public event EventHandler<PlanEventArgs> BambooPlanChanged;
 
         public void Close()
         {
