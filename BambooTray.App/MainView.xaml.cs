@@ -43,7 +43,7 @@ namespace BambooTray.App
                         TaskbarIcon.ShowBalloonTip("Build Failed", $"{e.Plan.ProjectName} {e.Plan.BuildName} failed", Properties.Resources.icon_build_failed);
                         break;
                     case BuildState.Successful:
-                        TaskbarIcon.ShowBalloonTip("Build succeded", $"{e.Plan.ProjectName} {e.Plan.BuildName} was successful", Properties.Resources.icon_build_successful);
+                        TaskbarIcon.ShowBalloonTip("Build succeeded", $"{e.Plan.ProjectName} {e.Plan.BuildName} was successful", Properties.Resources.icon_build_successful);
                         break;
                     case BuildState.Unknown:
                         TaskbarIcon.ShowBalloonTip("Build stopped", $"{e.Plan.ProjectName} {e.Plan.BuildName} was stopped", Properties.Resources.icon_build_unknown);
