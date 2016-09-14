@@ -13,6 +13,7 @@ namespace BambooTray.App.Bamboo
 {
     public class BambooPlanUpdater : IBambooPlanUpdater
     {
+        private const int Timeout = 5000;
         private readonly IBambooClient _bambooClient;
         private readonly IBambooPlanPublisher _bambooPlanPublisher;
         private readonly Configuration.Configuration _config;
@@ -47,41 +48,42 @@ namespace BambooTray.App.Bamboo
 
             while (!token.IsCancellationRequested)
             {
-                Thread.Sleep(5000);
                 Plans plans = await GetFavouritePlans(session).ConfigureAwait(false);
-                if (plans == null)
-                    continue;
-
-                foreach (Plan plan in plans.PlanList)
+                if (plans != null)
                 {
-                    BambooPlan newBambooPlan = new BambooPlan();
-                    Result newResult;
-                    if (plan.IsBuilding)
+                    IEnumerable<Task<Result>> resultTasks = plans.PlanList.Select(plan => GetPlanResult(plan, session));
+                    Result[] results = await Task.WhenAll(resultTasks);
+
+                    foreach (PlanResult planResult in plans.PlanList.Zip(results, (plan, result) => new PlanResult(plan, result)))
                     {
-                        newResult = await GetBuildingBuild(session, plan.PlanKey.Key).ConfigureAwait(false);
-                        if (newResult != null)
-                            newBambooPlan.RemainingTime = newResult.Progress.PrettyTimeRamaining;
+                        BambooPlan bambooPlan = new BambooPlan();
+                        if (planResult.Plan.IsBuilding)
+                            bambooPlan.RemainingTime = planResult.Result.Progress.PrettyTimeRamaining;
+
+                        if (oldResults.Values.Contains(planResult.Result))
+                            continue;
+
+                        oldResults[planResult.Plan.PlanKey.Key] = planResult.Result;
+                        bambooPlan.BuildName = planResult.Plan.BuildName;
+                        bambooPlan.PlanKey = planResult.Plan.PlanKey.Key;
+                        bambooPlan.BuildState = planResult.Result.BuildState;
+                        bambooPlan.ProjectKey = planResult.Plan.ProjectKey;
+                        bambooPlan.ProjectName = planResult.Plan.ProjectName;
+                        bambooPlan.IsBuilding = planResult.Plan.IsBuilding;
+                        bambooPlan.IsEnabled = planResult.Plan.Enabled;
+                        _bambooPlanPublisher.FirePlanChanged(bambooPlan);
                     }
-                    else
-                        newResult = await GetLatestBuild(session, plan.PlanKey.Key).ConfigureAwait(false);
-
-                    if (newResult == null)
-                        continue;
-
-                    if (oldResults.Any(x => x.Key == plan.PlanKey.Key) && newResult.Equals(oldResults[plan.PlanKey.Key]))
-                        continue;
-
-                    oldResults[plan.PlanKey.Key] = newResult;
-                    newBambooPlan.BuildName = plan.BuildName;
-                    newBambooPlan.PlanKey = plan.PlanKey.Key;
-                    newBambooPlan.BuildState = newResult.BuildState;
-                    newBambooPlan.ProjectKey = plan.ProjectKey;
-                    newBambooPlan.ProjectName = plan.ProjectName;
-                    newBambooPlan.IsBuilding = plan.IsBuilding;
-                    newBambooPlan.IsEnabled = plan.Enabled;
-                    _bambooPlanPublisher.FirePlanChanged(newBambooPlan);
                 }
+
+                Thread.Sleep(Timeout);
             }
+        }
+
+        private Task<Result> GetPlanResult(Plan plan, Session session)
+        {
+            return plan.IsBuilding
+                ? GetBuildingBuild(session, plan.PlanKey.Key)
+                : GetLatestBuild(session, plan.PlanKey.Key);
         }
 
         private async Task<Result> GetBuildingBuild(Session session, string planKey)
@@ -111,6 +113,18 @@ namespace BambooTray.App.Bamboo
                 _onSessionExpired.Invoke(this, EventArgs.Empty);
 
             return null;
+        }
+
+        private class PlanResult
+        {
+            public PlanResult(Plan plan, Result result)
+            {
+                Plan = plan;
+                Result = result;
+            }
+
+            public Plan Plan { get; }
+            public Result Result { get; }
         }
     }
 }

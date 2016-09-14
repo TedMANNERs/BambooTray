@@ -21,7 +21,7 @@ namespace BambooTray.App.Bamboo.Resources
         public int BuildDurationInSeconds { get; set; }
 
         [XmlElement("progress")]
-        public Progress Progress { get; set; } = new Progress();
+        public Progress Progress { get; set; }
 
         protected bool Equals(Result other)
         {
