@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace BambooTray.App
 {
     public class PopupViewModel : IPopupViewModel, INotifyPropertyChanged
     {
-        private readonly IDictionary<string, BambooPlan> _bambooPlans = new Dictionary<string, BambooPlan>();
+        private readonly IDictionary<string, BambooPlan> _bambooPlans = new ConcurrentDictionary<string, BambooPlan>();
         private readonly Configuration.Configuration _config;
         private Uri _iconSource;
 
