@@ -7,9 +7,81 @@
              xmlns:buildstate="clr-namespace:BambooTray.App.Bamboo.Resources"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:PopupViewModelDesignData, IsDesignTimeCreatable=True}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             MinHeight="200" MinWidth="300">
+    
+    <UserControl.Resources>
+        <Storyboard x:Key="PlanBuilding" Name="BuildingAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(RotateTransform.Angle)"
+                                                                                 Duration="0:0:1" From="0" To="180" RepeatBehavior="Forever"/>
+        </Storyboard>
+
+        <Style x:Key="PlanListStyle" TargetType="ItemsControl" BasedOn="{StaticResource {x:Type ItemsControl}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding BambooPlans.Count}" Value="0">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Grid Background="White">
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                       Text="No plans to display" FontSize="16"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="BuildStateStyle" TargetType="{x:Type Ellipse}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Failed}">
+                    <Setter Property="Fill" Value="Red"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Successful}">
+                    <Setter Property="Fill" Value="Green"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Unknown}">
+                    <Setter Property="Fill" Value="DarkGray"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsBuilding}" Value="true">
+                    <Setter Property="Fill" Value="DodgerBlue"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsEnabled}" Value="false">
+                    <Setter Property="Fill" Value="Gray"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PathStyle" TargetType="{x:Type Path}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Failed}">
+                    <Setter Property="Data" Value="M 15,5 L 15,17 M 15,21 L 15,25"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Successful}">
+                    <Setter Property="Data" Value="M 8,15 L 13,20 L 22,10" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Unknown}">
+                    <Setter Property="Data" Value="M 22,8 L 8,22"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsBuilding}" Value="true">
+                    <Setter Property="Data" Value="M 8,23 A 15,20 180 0 0 22,23 M 8,7 A 15,20 180 0 1 22,7"/>
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource PlanBuilding}"/>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <StopStoryboard BeginStoryboardName="BuildingAnimation"/>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsEnabled}" Value="false">
+                    <Setter Property="Data" Value="M 8,15 L 22, 15"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
     <Border BorderBrush="LightGray" BorderThickness="1">
-        <ItemsControl ItemsSource="{Binding BambooPlans}" Background="White" AlternationCount="{Binding BambooPlans.Count}">
+        <ItemsControl ItemsSource="{Binding BambooPlans}" Background="White" AlternationCount="{Binding BambooPlans.Count}" 
+                      Style="{StaticResource PlanListStyle}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button Cursor="Hand" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.OpenInBrowserCommand}"
@@ -20,32 +92,17 @@
                             </ControlTemplate>
                         </Button.Template>
                         <StackPanel Orientation="Horizontal" Margin="10">
-                            <Ellipse Height="30" Width="30" Margin="0,0,10,0">
-                                <Ellipse.Style>
-                                    <Style TargetType="{x:Type Ellipse}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Failed}">
-                                                <Setter Property="Fill" Value="Red"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Successful}">
-                                                <Setter Property="Fill" Value="Green"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding BuildState}" Value="{x:Static buildstate:BuildState.Unknown}">
-                                                <Setter Property="Fill" Value="DarkGray"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsBuilding}" Value="true">
-                                                <Setter Property="Fill" Value="DodgerBlue"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsEnabled}" Value="false">
-                                                <Setter Property="Fill" Value="Gray"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Ellipse.Style>
-                            </Ellipse>
+                            <Grid Margin="0,0,10,0">
+                                <Ellipse Height="30" Width="30" Style="{StaticResource BuildStateStyle}" />
+                                <Path Stroke="White" StrokeThickness="3" Style="{StaticResource PathStyle}">
+                                    <Path.RenderTransform>
+                                        <RotateTransform Angle="0" CenterX="15" CenterY="15"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
                             <Label Content="{Binding ProjectName}" FontSize="16"/>
                             <Label Content="{Binding BuildName}" FontSize="16"/>
-                            <Label Content="{Binding RemainingTime}" FontSize="12"/>
+                            <Label Content="{Binding RemainingTime}" FontSize="12" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </DataTemplate>

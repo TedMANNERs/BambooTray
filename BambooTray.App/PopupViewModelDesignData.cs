@@ -19,13 +19,36 @@ namespace BambooTray.App
                             BuildName = "Building Build",
                             ProjectName = "Project",
                             IsBuilding = true,
-                            RemainingTime = "15 min remaining"
+                            RemainingTime = "15 min remaining",
+                            IsEnabled = true
                         },
                     new BambooPlan
                         {
                             BuildState = BuildState.Successful,
                             BuildName = "Successful Build",
-                            ProjectName = "Project"
+                            ProjectName = "Project",
+                            IsEnabled = true
+                        },
+                    new BambooPlan
+                        {
+                            BuildState = BuildState.Failed,
+                            BuildName = "Failed Build",
+                            ProjectName = "Project",
+                            IsEnabled = true
+                        },
+                    new BambooPlan
+                        {
+                            BuildState = BuildState.Unknown,
+                            BuildName = "Unknown Build",
+                            ProjectName = "Project",
+                            IsEnabled = true
+                        },
+                    new BambooPlan
+                        {
+                            BuildState = BuildState.Unknown,
+                            BuildName = "Disabled Plan",
+                            ProjectName = "Project",
+                            IsEnabled = false
                         }
                 };
         }
