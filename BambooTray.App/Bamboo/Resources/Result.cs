@@ -25,10 +25,12 @@ namespace BambooTray.App.Bamboo.Resources
 
         protected bool Equals(Result other)
         {
-            return string.Equals(BuildResultKey, other.BuildResultKey) &&
-                   BuildState == other.BuildState &&
-                   BuildNumber == other.BuildNumber &&
-                   BuildDurationInSeconds == other.BuildDurationInSeconds;
+            return Number == other.Number
+                   && string.Equals(BuildResultKey, other.BuildResultKey)
+                   && BuildState == other.BuildState
+                   && BuildNumber == other.BuildNumber
+                   && BuildDurationInSeconds == other.BuildDurationInSeconds
+                   && Equals(Progress, other.Progress);
         }
 
         public override bool Equals(object obj)
