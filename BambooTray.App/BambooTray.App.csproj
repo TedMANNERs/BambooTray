@@ -89,47 +89,47 @@
     <Compile Include="AppModule.cs" />
     <Compile Include="Bamboo\Resources\Progress.cs" />
     <Compile Include="Bamboo\Resources\Results.cs" />
-    <Compile Include="IMainViewModel.cs" />
-    <Compile Include="MainViewModel.cs" />
-    <Compile Include="PopupView.xaml.cs">
+    <Compile Include="View\IMainViewModel.cs" />
+    <Compile Include="View\MainViewModel.cs" />
+    <Compile Include="View\Popup\PopupView.xaml.cs">
       <DependentUpon>PopupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PopupViewModelDesignData.cs" />
+    <Compile Include="View\Popup\PopupViewModelDesignData.cs" />
     <Compile Include="SessionManagement\Authenticator.cs" />
     <Compile Include="Bamboo\Resources\Link.cs" />
     <Compile Include="Bamboo\Resources\Plans.cs" />
-    <Compile Include="ILoginDialogService.cs" />
-    <Compile Include="LoginDialogService.cs" />
+    <Compile Include="View\Login\ILoginDialogService.cs" />
+    <Compile Include="View\Login\LoginDialogService.cs" />
     <Compile Include="Model\LoginCredentials.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="SessionManagement\IAuthenticator.cs" />
     <Compile Include="SessionManagement\ISessionManager.cs" />
-    <Compile Include="IViewModel.cs" />
+    <Compile Include="View\IViewModel.cs" />
     <Compile Include="SessionManagement\SessionManager.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
-    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="View\DelegateCommand.cs" />
     <Compile Include="EventBroker\BambooPlanPublisher.cs" />
     <Compile Include="EventBroker\IBambooPlanPublisher.cs" />
     <Compile Include="EventBroker\PlanEventArgs.cs" />
     <Compile Include="EventBroker\Topics.cs" />
-    <Compile Include="ILoginViewModel.cs" />
-    <Compile Include="IPopupViewModel.cs" />
-    <Compile Include="LoginView.xaml.cs">
+    <Compile Include="View\Login\ILoginViewModel.cs" />
+    <Compile Include="View\Popup\IPopupViewModel.cs" />
+    <Compile Include="View\Login\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoginViewModel.cs" />
+    <Compile Include="View\Login\LoginViewModel.cs" />
     <Compile Include="Model\BambooPlan.cs" />
     <Compile Include="Bamboo\Resources\BuildState.cs" />
     <Compile Include="Bamboo\IRestResponse.cs" />
     <Compile Include="Bamboo\Resources\Plan.cs" />
     <Compile Include="Bamboo\RestResponse.cs" />
-    <Page Include="LoginView.xaml">
+    <Page Include="View\Login\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainView.xaml">
+    <Page Include="View\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -142,17 +142,17 @@
     <Compile Include="Bamboo\Resources\Result.cs" />
     <Compile Include="Bamboo\IBambooClient.cs" />
     <Compile Include="Bamboo\IBambooPlanUpdater.cs" />
-    <Compile Include="MainView.xaml.cs">
+    <Compile Include="View\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PopupView.xaml">
+    <Page Include="View\Popup\PopupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PopupViewModel.cs" />
+    <Compile Include="View\Popup\PopupViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

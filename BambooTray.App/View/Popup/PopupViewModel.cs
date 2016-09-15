@@ -12,7 +12,7 @@ using BambooTray.App.Configuration;
 using BambooTray.App.EventBroker;
 using BambooTray.App.Model;
 
-namespace BambooTray.App
+namespace BambooTray.App.View.Popup
 {
     public class PopupViewModel : IPopupViewModel, INotifyPropertyChanged
     {

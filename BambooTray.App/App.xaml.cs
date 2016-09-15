@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using BambooTray.App.View;
 using Ninject;
 
 namespace BambooTray.App

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="BambooTray.App.PopupView"
+﻿<UserControl x:Class="BambooTray.App.View.Popup.PopupView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

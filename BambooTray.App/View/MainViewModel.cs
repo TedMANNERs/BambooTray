@@ -1,7 +1,8 @@
 using System.Windows.Input;
 using BambooTray.App.SessionManagement;
+using BambooTray.App.View.Popup;
 
-namespace BambooTray.App
+namespace BambooTray.App.View
 {
     public class MainViewModel : IMainViewModel
     {

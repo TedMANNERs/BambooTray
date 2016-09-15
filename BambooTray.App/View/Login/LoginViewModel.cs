@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security;
 
-namespace BambooTray.App
+namespace BambooTray.App.View.Login
 {
     public class LoginViewModel : ILoginViewModel
     {

@@ -6,7 +6,7 @@ using BambooTray.App.Bamboo.Resources;
 using BambooTray.App.EventBroker;
 using BambooTray.App.Model;
 
-namespace BambooTray.App
+namespace BambooTray.App.View.Popup
 {
     public class PopupViewModelDesignData : IPopupViewModel
     {

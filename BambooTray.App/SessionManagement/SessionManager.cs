@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using BambooTray.App.Bamboo;
 using BambooTray.App.Model;
+using BambooTray.App.View.Login;
 
 namespace BambooTray.App.SessionManagement
 {

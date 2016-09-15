@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace BambooTray.App
+namespace BambooTray.App.View.Login
 {
     /// <summary>
     /// Interaction logic for LoginView.xaml

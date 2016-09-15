@@ -1,6 +1,6 @@
 using BambooTray.App.Model;
 
-namespace BambooTray.App
+namespace BambooTray.App.View.Login
 {
     public class LoginDialogService : ILoginDialogService
     {

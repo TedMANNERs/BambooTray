@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace BambooTray.App
+namespace BambooTray.App.View
 {
     public delegate bool CommandCanExecute();
 

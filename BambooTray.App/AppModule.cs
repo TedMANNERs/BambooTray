@@ -2,6 +2,9 @@
 using BambooTray.App.Configuration;
 using BambooTray.App.EventBroker;
 using BambooTray.App.SessionManagement;
+using BambooTray.App.View;
+using BambooTray.App.View.Login;
+using BambooTray.App.View.Popup;
 using Ninject.Extensions.AppccelerateEventBroker;
 using Ninject.Modules;
 

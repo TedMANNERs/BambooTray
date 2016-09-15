@@ -5,7 +5,7 @@ using System.Windows.Input;
 using BambooTray.App.EventBroker;
 using BambooTray.App.Model;
 
-namespace BambooTray.App
+namespace BambooTray.App.View.Popup
 {
     public interface IPopupViewModel : IViewModel
     {

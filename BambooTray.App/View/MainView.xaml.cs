@@ -3,7 +3,7 @@ using System.Windows;
 using BambooTray.App.Bamboo.Resources;
 using BambooTray.App.EventBroker;
 
-namespace BambooTray.App
+namespace BambooTray.App.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
