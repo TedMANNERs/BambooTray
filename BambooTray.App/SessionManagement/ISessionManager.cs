@@ -7,5 +7,7 @@ namespace BambooTray.App.SessionManagement
         Task OpenSession();
 
         void CloseSession();
+
+        bool HasValidSession { get; }
     }
 }

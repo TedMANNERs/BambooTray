@@ -23,6 +23,8 @@ namespace BambooTray.App.SessionManagement
             SessionExpired += OnSessionExpired;
         }
 
+        public bool HasValidSession { get; private set; }
+
         public async Task OpenSession()
         {
             if (File.Exists(SessionFileName))
@@ -31,19 +33,25 @@ namespace BambooTray.App.SessionManagement
                 using (TextReader reader = new StreamReader(stream))
                 {
                     _session = new Session(reader.ReadLine());
-                    _bambooPlanUpdater.Start(_session, SessionExpired);
                 }
             }
             else
-                await GetNewSession().ConfigureAwait(false);
+                await RenewSession().ConfigureAwait(false);
+
+            if (_session != null)
+            {
+                _bambooPlanUpdater.Start(_session, SessionExpired);
+                HasValidSession = true;
+            }
         }
 
         public void CloseSession()
         {
             _bambooPlanUpdater.Stop();
+            HasValidSession = false;
         }
 
-        private async Task GetNewSession()
+        private async Task<bool> RenewSession()
         {
             _session = null;
             do
@@ -51,17 +59,25 @@ namespace BambooTray.App.SessionManagement
                 LoginCredentials credentials = Application.Current.Dispatcher.Invoke(_loginDialogService.ShowDialog);
                 if (credentials != null)
                     _session = await _authenticator.Authenticate(credentials).ConfigureAwait(false);
+                else
+                    return false;
             }
             while (_session == null);
             SaveSession();
+            return true;
         }
 
         public event EventHandler SessionExpired;
 
         private async void OnSessionExpired(object sender, EventArgs args)
         {
-            _bambooPlanUpdater.Stop();
-            await GetNewSession().ContinueWith(task => _bambooPlanUpdater.Start(_session, SessionExpired)).ConfigureAwait(false);
+            CloseSession();
+            bool result = await RenewSession().ConfigureAwait(false);
+            if (!result)
+                return;
+
+            _bambooPlanUpdater.Start(_session, SessionExpired);
+            HasValidSession = true;
         }
 
         private void SaveSession()
