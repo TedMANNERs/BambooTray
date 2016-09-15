@@ -4,7 +4,7 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:popup="clr-namespace:BambooTray.App.View.Popup"
         Visibility="Hidden" ShowInTaskbar="False" WindowStyle="None" 
-        Width="10" Height="10" Icon="../Images/bamboo.ico"
+        Width="0" Height="0" Icon="../Images/bamboo.ico" ShowActivated="False"
         Closed="Window_Closed" Loaded="Window_Loaded">
 
     <tb:TaskbarIcon Name="TaskbarIcon"
