@@ -88,19 +88,19 @@ namespace BambooTray.App.Bamboo
 
         private async Task<Result> GetBuildingBuild(Session session, string planKey)
         {
-            Results latestResult = await GetResource<Results>($"{_config.BambooHostname}rest/api/latest/result/{planKey}/?max-results=1&expand=results.result", session).ConfigureAwait(false);
+            Results latestResult = await GetResource<Results>($"{_config.BambooHostname}/rest/api/latest/result/{planKey}/?max-results=1&expand=results.result", session).ConfigureAwait(false);
             int buildNumber = latestResult.ResultList.First().BuildNumber;
-            return await GetResource<Result>($"{_config.BambooHostname}rest/api/latest/result/{planKey}/{++buildNumber}", session).ConfigureAwait(false);
+            return await GetResource<Result>($"{_config.BambooHostname}/rest/api/latest/result/{planKey}/{++buildNumber}", session).ConfigureAwait(false);
         }
 
         private Task<Plans> GetFavouritePlans(Session session)
         {
-            return GetResource<Plans>($"{_config.BambooHostname}rest/api/latest/plan/?favourite&expand=plans.plan", session);
+            return GetResource<Plans>($"{_config.BambooHostname}/rest/api/latest/plan/?favourite&expand=plans.plan", session);
         }
 
         private Task<Result> GetLatestBuild(Session session, string planKey)
         {
-            return GetResource<Result>($"{_config.BambooHostname}rest/api/latest/result/{planKey}/latest", session);
+            return GetResource<Result>($"{_config.BambooHostname}/rest/api/latest/result/{planKey}/latest", session);
         }
 
         private async Task<T> GetResource<T>(string url, Session session) where T : class
