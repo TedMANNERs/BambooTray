@@ -105,7 +105,7 @@ namespace BambooTray.App.Bamboo
 
         private async Task<T> GetResource<T>(string url, Session session) where T : class
         {
-            IRestResponse<T> resultResponse = await _bambooClient.GetAsync<T>(url, session.SessionId).ConfigureAwait(false);
+            IRestResponse<T> resultResponse = await _bambooClient.GetAsync<T>(url, session).ConfigureAwait(false);
             if (resultResponse.IsSuccess)
                 return resultResponse.Data;
 

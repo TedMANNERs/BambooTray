@@ -42,9 +42,10 @@ namespace BambooTray.App.SessionManagement
                 if (!postResponse.IsSuccessStatusCode || xSeraphLoginReason != XSeraphLoginReason.Ok)
                     return null;
 
-                IEnumerable<string> sessionHeaders = postResponse.Headers.GetValues("Set-Cookie");
+                IList<string> sessionHeaders = postResponse.Headers.GetValues("Set-Cookie").ToList();
                 string sessionId = sessionHeaders.First(x => x.Contains("JSESSIONID")).Split(';')[0];
-                return new Session(sessionId);
+                string seraphId = sessionHeaders.First(x => x.Contains("seraph")).Split(';')[0];
+                return new Session(sessionId, seraphId);
             }
         }
 

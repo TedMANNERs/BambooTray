@@ -32,7 +32,9 @@ namespace BambooTray.App.SessionManagement
                 using (FileStream stream = new FileStream(SessionFileName, FileMode.Open))
                 using (TextReader reader = new StreamReader(stream))
                 {
-                    _session = new Session(reader.ReadLine());
+                    string sessionId = reader.ReadLine();
+                    string seraphId = reader.ReadLine();
+                    _session = new Session(sessionId, seraphId);
                 }
             }
             else
@@ -85,7 +87,8 @@ namespace BambooTray.App.SessionManagement
             using (FileStream stream = new FileStream(SessionFileName, FileMode.Create))
             using (StreamWriter writer = new StreamWriter(stream))
             {
-                writer.Write(_session.SessionId);
+                writer.WriteLine(_session.SessionId);
+                writer.WriteLine(_session.SeraphId);
             }
         }
     }
