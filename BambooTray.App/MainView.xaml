@@ -10,7 +10,8 @@
     <tb:TaskbarIcon Name="TaskbarIcon"
                     IconSource="{Binding PopupViewModel.IconSource}"
                     PopupActivation="LeftClick"
-                    MenuActivation="RightClick">
+                    MenuActivation="RightClick"
+                    ToolTipText="BambooTray">
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Login" Command="{Binding LoginCommand}"/>
