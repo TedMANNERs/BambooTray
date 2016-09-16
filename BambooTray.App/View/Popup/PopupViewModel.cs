@@ -45,7 +45,7 @@ namespace BambooTray.App.View.Popup
         [EventSubscription(Topics.PlanChanged, typeof(OnPublisher))]
         public void PlanChanged(object sender, PlanEventArgs e)
         {
-            if (_bambooPlans.ContainsKey(e.Plan.PlanKey))
+            if (_bambooPlans.ContainsKey(e.Plan.PlanKey) && _bambooPlans[e.Plan.PlanKey].IsBuilding != e.Plan.IsBuilding)
                 BambooPlanChanged?.Invoke(sender, e);
 
             _bambooPlans[e.Plan.PlanKey] = e.Plan;
