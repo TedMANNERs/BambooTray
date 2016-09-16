@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:popup="clr-namespace:BambooTray.App.View.Popup"
-        Visibility="Hidden" ShowInTaskbar="False" WindowStyle="None" 
+        Visibility="Hidden" ShowInTaskbar="False" WindowStyle="None" WindowState="Minimized"
         Width="0" Height="0" Icon="../Images/bamboo.ico" ShowActivated="False"
         Closed="Window_Closed" Loaded="Window_Loaded">
 
