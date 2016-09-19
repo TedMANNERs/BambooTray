@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <?include $(sys.CURRENTDIR)\Config.wxi?>
+	<Product Id="*" Name="$(var.ProductName)" Language="1033" Version="1.0.0.0" Manufacturer="$(var.Manufacturer)" UpgradeCode="C649161C-E5CD-4598-8889-D6D02EEC89CD">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of $(var.ProductName) is already installed." />
+    <Media Id="1" Cabinet="setup.cab" EmbedCab="yes" />
+
+    <Icon Id="icon" SourceFile="$(var.IconSource)"/>
+    <Property Id="ARPPRODUCTICON" Value="icon" />
+
+	  <Property Id="APPLICATIONFOLDER" Secure="yes">
+	    <RegistrySearch Key="Software\$(var.Manufacturer)\$(var.ProductName)" Root="HKCU" Type="raw" Id="APPLICATIONFOLDER_REGSEARCH" Name="Path" />
+	  </Property>
+    
+	  <Feature Id="ProductFeature" Title="$(var.ProductName).Setup" Level="1">
+			<ComponentGroupRef Id="ShortcutComponents" />
+			<ComponentGroupRef Id="GeneratedComponents" />
+      <ComponentRef Id="CleanupAppFolderComponent"/>
+	  </Feature>
+      
+    <DirectoryRef Id="INSTALLFOLDER">
+	    <Component Id="CleanupAppFolderComponent" Guid="C0B7AF76-D034-4BC8-9D4F-01099DBDC5F3">
+	      <RegistryValue Root="HKCU" Key="Software\$(var.Manufacturer)\$(var.ProductName)" Name="Path" Type="string" Value="[INSTALLFOLDER]" KeyPath="yes" />
+	      <util:RemoveFolderEx On="uninstall" Property="APPLICATIONFOLDER"/>
+	    </Component>
+	  </DirectoryRef>
+
+	  <WixVariable Id="WixUILicenseRtf" Value="$(var.LicenseFile)"/>
+    <UIRef Id="WixUI_Minimal" />
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramMenuFolder">
+          <Directory Id="ProgramMenuAppFolder" Name="$(var.ProductName)" />
+      </Directory>
+
+      <Directory Id="StartupFolder"/>
+      
+			<Directory Id="ProgramFilesFolder">
+          <Directory Id="INSTALLFOLDER" Name="$(var.ProductName)" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+    <ComponentGroup Id="ShortcutComponents">
+      <Component Id="StartMenuShortcutComponent" Guid="8721DA01-D356-4F99-AA9E-38F5EC0CC0E4" Directory="ProgramMenuAppFolder">
+        <Shortcut
+            Id="StartMenuShortcut" Name="$(var.ProductName)" WorkingDirectory="INSTALLFOLDER"
+            Description="$(var.ShortcutDescription)"
+            Target="[INSTALLFOLDER]$(var.MainExecutable)" />
+        <RemoveFolder Id="RemoveStartMenuShortcut" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\$(var.Manufacturer)\$(var.ProductName)" Name="installed" 
+                       Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+      
+      <Component Id="StartupShortcutComponent" Guid="E719FE60-00E8-4C6B-89FB-334ACB4F19D5" Directory="StartupFolder">
+        <Shortcut
+            Id="StartupShortcut" Name="$(var.ProductName)" WorkingDirectory="INSTALLFOLDER"
+            Description="$(var.ShortcutDescription)"
+            Target="[INSTALLFOLDER]$(var.MainExecutable)" />
+        <RemoveFolder Id="RemoveStartupShortcut" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\$(var.Manufacturer)\$(var.ProductName)" Name="installed"
+                       Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+	</Fragment>
+</Wix>

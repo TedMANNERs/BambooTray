@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <?define ProductName = "BambooTray"?>
+  <?define Manufacturer = "TedMANNERs" ?>
+  <?define LicenseFile = ..\LICENSE.rtf ?>
+  <?define IconSource = ..\BambooTray.App\Images\bamboo.ico ?>
+  <?define MainExecutable = "BambooTray.App.exe" ?>
+  <?define ShortcutDescription = "BambooTray - Windows tray application to monitor your favourite bamboo plans" ?>
+</Include>
