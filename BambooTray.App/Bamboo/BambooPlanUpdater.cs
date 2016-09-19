@@ -39,7 +39,7 @@ namespace BambooTray.App.Bamboo
 
         public void Stop()
         {
-            _source.Cancel();
+            _source?.Cancel();
         }
 
         private async Task UpdatePlans(Session session, CancellationToken token)

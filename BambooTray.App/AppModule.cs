@@ -22,7 +22,7 @@ namespace BambooTray.App
             Bind<IBambooPlanUpdater>().To<BambooPlanUpdater>().InSingletonScope();
             Bind<IBambooClient>().To<BambooClient>();
 
-            Bind<IMainViewModel>().To<MainViewModel>().OnActivation(x => x.Load());
+            Bind<ITrayIconViewModel>().To<TrayIconViewModel>().OnActivation(x => x.Load());
             Bind<IPopupViewModel>().To<PopupViewModel>().RegisterOnEventBroker(EventBrokerName);
             Bind<ILoginViewModel>().To<LoginViewModel>();
 

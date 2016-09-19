@@ -1,15 +1,12 @@
 ﻿<Application x:Class="BambooTray.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:popup="clr-namespace:BambooTray.App.View.Popup"
-             xmlns:login="clr-namespace:BambooTray.App.View.Login"
-             xmlns:view="clr-namespace:BambooTray.App.View">
+             ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
-         <DataTemplate DataType="{x:Type popup:PopupViewModel}">
-             <view:MainView />
-         </DataTemplate>
-         <DataTemplate DataType="{x:Type login:LoginViewModel}">
-             <login:LoginView />
-         </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="PopupViewResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

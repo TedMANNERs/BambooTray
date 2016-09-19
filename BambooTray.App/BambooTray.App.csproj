@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Bin\</OutputPath>
+    <OutputPath>..\Bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,10 +29,14 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Bin\</OutputPath>
+    <OutputPath>..\Bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\bamboo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Appccelerate.EventBroker, Version=3.15.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
@@ -89,8 +93,8 @@
     <Compile Include="AppModule.cs" />
     <Compile Include="Bamboo\Resources\Progress.cs" />
     <Compile Include="Bamboo\Resources\Results.cs" />
-    <Compile Include="View\IMainViewModel.cs" />
-    <Compile Include="View\MainViewModel.cs" />
+    <Compile Include="View\ITrayIconViewModel.cs" />
+    <Compile Include="View\TrayIconViewModel.cs" />
     <Compile Include="View\Popup\PopupView.xaml.cs">
       <DependentUpon>PopupView.xaml</DependentUpon>
     </Compile>
@@ -125,13 +129,13 @@
     <Compile Include="Bamboo\IRestResponse.cs" />
     <Compile Include="Bamboo\Resources\Plan.cs" />
     <Compile Include="Bamboo\RestResponse.cs" />
-    <Page Include="View\Login\LoginView.xaml">
+    <Page Include="PopupViewResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainView.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="View\Login\LoginView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -142,10 +146,6 @@
     <Compile Include="Bamboo\Resources\Result.cs" />
     <Compile Include="Bamboo\IBambooClient.cs" />
     <Compile Include="Bamboo\IBambooPlanUpdater.cs" />
-    <Compile Include="View\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="View\Popup\PopupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
