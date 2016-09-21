@@ -54,6 +54,13 @@ namespace BambooTray.App.Bamboo
                     IEnumerable<Task<Result>> resultTasks = plans.PlanList.Select(plan => GetPlanResult(plan, session));
                     Result[] results = await Task.WhenAll(resultTasks);
 
+                    if (plans.PlanList.Count < oldResults.Count)
+                    {
+                        string removedPlanKey = oldResults.First(x => !plans.PlanList.Any(y => y.PlanKey.Key == x.Key)).Key;
+                        oldResults.Remove(removedPlanKey);
+                        _bambooPlanPublisher.FirePlanRemoved(new BambooPlan { PlanKey = removedPlanKey });
+                    }
+
                     foreach (PlanResult planResult in plans.PlanList.Zip(results, (plan, result) => new PlanResult(plan, result)))
                     {
                         BambooPlan bambooPlan = new BambooPlan();

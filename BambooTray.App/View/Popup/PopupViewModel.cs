@@ -53,6 +53,16 @@ namespace BambooTray.App.View.Popup
             OnPropertyChanged(nameof(BambooPlans));
         }
 
+        [EventSubscription(Topics.PlanRemoved, typeof(OnPublisher))]
+        public void PlanRemoved(object sender, PlanEventArgs e)
+        {
+            if (!_bambooPlans.ContainsKey(e.Plan.PlanKey))
+                return;
+
+            _bambooPlans.Remove(e.Plan.PlanKey);
+            OnPropertyChanged(nameof(BambooPlans));
+        }
+
         private void UpdateIcon(BambooPlan plan)
         {
             switch (plan.BuildState)

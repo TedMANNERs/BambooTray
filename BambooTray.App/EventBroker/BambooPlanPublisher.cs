@@ -11,7 +11,15 @@ namespace BambooTray.App.EventBroker
             PlanChanged?.Invoke(this, new PlanEventArgs(plan));
         }
 
+        public void FirePlanRemoved(BambooPlan plan)
+        {
+            PlanRemoved?.Invoke(this, new PlanEventArgs(plan));
+        }
+
         [EventPublication(Topics.PlanChanged)]
         public event EventHandler<PlanEventArgs> PlanChanged;
+
+        [EventPublication(Topics.PlanRemoved)]
+        public event EventHandler<PlanEventArgs> PlanRemoved;
     }
 }
