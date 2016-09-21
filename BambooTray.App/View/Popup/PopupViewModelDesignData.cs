@@ -17,7 +17,7 @@ namespace BambooTray.App.View.Popup
                     new BambooPlan
                         {
                             BuildName = "Building Build",
-                            ProjectName = "Project",
+                            ProjectName = "Project1",
                             IsBuilding = true,
                             RemainingTime = "15 min remaining",
                             IsEnabled = true
@@ -26,28 +26,28 @@ namespace BambooTray.App.View.Popup
                         {
                             BuildState = BuildState.Successful,
                             BuildName = "Successful Build",
-                            ProjectName = "Project",
+                            ProjectName = "Project1",
                             IsEnabled = true
                         },
                     new BambooPlan
                         {
                             BuildState = BuildState.Failed,
                             BuildName = "Failed Build",
-                            ProjectName = "Project",
+                            ProjectName = "Project2",
                             IsEnabled = true
                         },
                     new BambooPlan
                         {
                             BuildState = BuildState.Unknown,
                             BuildName = "Unknown Build",
-                            ProjectName = "Project",
+                            ProjectName = "Project2",
                             IsEnabled = true
                         },
                     new BambooPlan
                         {
                             BuildState = BuildState.Unknown,
                             BuildName = "Disabled Plan",
-                            ProjectName = "Project",
+                            ProjectName = "Project2",
                             IsEnabled = false
                         }
                 };
