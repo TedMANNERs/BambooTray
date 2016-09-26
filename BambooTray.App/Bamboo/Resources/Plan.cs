@@ -23,17 +23,22 @@ namespace BambooTray.App.Bamboo.Resources
         [XmlElement("isBuilding")]
         public bool IsBuilding { get; set; }
 
+        [XmlElement("isActive")]
+        public bool IsActive { get; set; }
+
         [XmlElement("averageBuildTimeInSeconds")]
         public float AverageBuildTimeInSeconds { get; set; }
 
         protected bool Equals(Plan other)
         {
-            return string.Equals(ProjectKey, other.ProjectKey) &&
-                   string.Equals(ProjectName, other.ProjectName) &&
-                   string.Equals(BuildName, other.BuildName) &&
-                   Enabled == other.Enabled &&
-                   IsBuilding == other.IsBuilding &&
-                   AverageBuildTimeInSeconds.Equals(other.AverageBuildTimeInSeconds);
+            return string.Equals(ProjectKey, other.ProjectKey)
+                   && string.Equals(ProjectName, other.ProjectName)
+                   && string.Equals(BuildName, other.BuildName)
+                   && Equals(PlanKey, other.PlanKey)
+                   && Enabled == other.Enabled
+                   && IsBuilding == other.IsBuilding
+                   && IsActive == other.IsActive
+                   && AverageBuildTimeInSeconds.Equals(other.AverageBuildTimeInSeconds);
         }
 
         public override bool Equals(object obj)
@@ -54,8 +59,10 @@ namespace BambooTray.App.Bamboo.Resources
                 int hashCode = (ProjectKey != null ? ProjectKey.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (ProjectName != null ? ProjectName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (BuildName != null ? BuildName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (PlanKey != null ? PlanKey.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ Enabled.GetHashCode();
                 hashCode = (hashCode * 397) ^ IsBuilding.GetHashCode();
+                hashCode = (hashCode * 397) ^ IsActive.GetHashCode();
                 hashCode = (hashCode * 397) ^ AverageBuildTimeInSeconds.GetHashCode();
                 return hashCode;
             }

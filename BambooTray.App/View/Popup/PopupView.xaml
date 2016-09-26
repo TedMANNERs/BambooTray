@@ -98,6 +98,19 @@
                         <StopStoryboard BeginStoryboardName="BuildingAnimation"/>
                     </DataTrigger.ExitActions>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding IsQueuing}" Value="true">
+                    <Setter Property="Stroke" Value="DodgerBlue"/>
+                    <Setter Property="Data">
+                        <Setter.Value>
+                            <GeometryGroup>
+                                <CombinedGeometry Geometry1="{StaticResource Circle}"/>
+                                <PathGeometry Figures="M 5,10 L 7,10
+                                                       M 9,10 L 11,10
+                                                       M 13,10 L 15,10"/>
+                            </GeometryGroup>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
                 <DataTrigger Binding="{Binding IsEnabled}" Value="false">
                     <Setter Property="Stroke" Value="Gray"/>
                     <Setter Property="Data">

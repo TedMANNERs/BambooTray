@@ -31,6 +31,14 @@ namespace BambooTray.App.View.Popup
                         },
                     new BambooPlan
                         {
+                            BuildState = BuildState.Unknown,
+                            BuildName = "Queuing Build",
+                            ProjectName = "Project1",
+                            IsEnabled = true,
+                            IsQueuing = true
+                        },
+                    new BambooPlan
+                        {
                             BuildState = BuildState.Failed,
                             BuildName = "Failed Build",
                             ProjectName = "Project2",

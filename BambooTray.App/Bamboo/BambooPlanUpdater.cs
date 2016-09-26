@@ -77,6 +77,7 @@ namespace BambooTray.App.Bamboo
                         bambooPlan.ProjectKey = planResult.Plan.ProjectKey;
                         bambooPlan.ProjectName = planResult.Plan.ProjectName;
                         bambooPlan.IsBuilding = planResult.Plan.IsBuilding;
+                        bambooPlan.IsQueuing = planResult.Plan.IsActive && planResult.Plan.IsBuilding == false;
                         bambooPlan.IsEnabled = planResult.Plan.Enabled;
                         _bambooPlanPublisher.FirePlanChanged(bambooPlan);
                     }
