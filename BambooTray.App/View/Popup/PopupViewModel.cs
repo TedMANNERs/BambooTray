@@ -39,7 +39,7 @@ namespace BambooTray.App.View.Popup
 
         public ICommand OpenInBrowserCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-        public ICollection<BambooPlan> BambooPlans => _bambooPlans.Values.OrderBy(x => x.BuildName).ToList();
+        public ICollection<BambooPlan> BambooPlans => _bambooPlans.Values.OrderBy(x => x.ProjectName).ThenBy(x => x.BuildName).ToList();
         public event EventHandler<PlanEventArgs> BambooPlanChanged;
 
         [EventSubscription(Topics.PlanChanged, typeof(OnPublisher))]

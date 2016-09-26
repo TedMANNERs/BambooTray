@@ -51,7 +51,7 @@ namespace BambooTray.App.Bamboo
                 Plans plans = await GetFavouritePlans(session).ConfigureAwait(false);
                 if (plans != null)
                 {
-                    IEnumerable<Task<Result>> resultTasks = plans.PlanList.Select(plan => GetPlanResult(plan, session));
+                    IEnumerable<Task<Result>> resultTasks = plans.PlanList.Select(plan => GetLatestBuild(session, plan.PlanKey.Key));
                     Result[] results = await Task.WhenAll(resultTasks);
 
                     if (plans.PlanList.Count < oldResults.Count)
@@ -86,29 +86,17 @@ namespace BambooTray.App.Bamboo
             }
         }
 
-        private Task<Result> GetPlanResult(Plan plan, Session session)
-        {
-            return plan.IsBuilding
-                ? GetBuildingBuild(session, plan.PlanKey.Key)
-                : GetLatestBuild(session, plan.PlanKey.Key);
-        }
-
-        private async Task<Result> GetBuildingBuild(Session session, string planKey)
-        {
-            Results latestResult = await GetResource<Results>($"{_config.BambooHostname}/rest/api/latest/result/{planKey}/?max-results=1&expand=results.result&includeAllStates=true", session).ConfigureAwait(false);
-            int buildNumber = latestResult.ResultList.First().BuildNumber;
-            //...{plankey}/latest?includeAllStates does not always return the latest result for some reason
-            return await GetResource<Result>($"{_config.BambooHostname}/rest/api/latest/result/{planKey}/{buildNumber}", session).ConfigureAwait(false);
-        }
-
         private Task<Plans> GetFavouritePlans(Session session)
         {
             return GetResource<Plans>($"{_config.BambooHostname}/rest/api/latest/plan/?favourite&expand=plans.plan", session);
         }
 
-        private Task<Result> GetLatestBuild(Session session, string planKey)
+        private async Task<Result> GetLatestBuild(Session session, string planKey)
         {
-            return GetResource<Result>($"{_config.BambooHostname}/rest/api/latest/result/{planKey}/latest?includeAllStates=true", session);
+            Results latestResult = await GetResource<Results>($"{_config.BambooHostname}/rest/api/latest/result/{planKey}/?max-results=1&expand=results.result&includeAllStates=true", session).ConfigureAwait(false);
+            int buildNumber = latestResult.ResultList.First().BuildNumber;
+            //...{plankey}/latest?includeAllStates does not always return the latest result for some reason
+            return await GetResource<Result>($"{_config.BambooHostname}/rest/api/latest/result/{planKey}/{buildNumber}", session).ConfigureAwait(false);
         }
 
         private async Task<T> GetResource<T>(string url, Session session) where T : class
